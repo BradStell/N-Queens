@@ -13,6 +13,12 @@ class StateNode
 		void calculateHeuristic();
 		int getHeuristic();
 		void printState();
+		void calcHorzCol();
+		void calcVertCol();
+		void calcDiagCol();
+		int calcCollisions(int queensPerRow);
+		void printDiagonals();
+		void printOtherDiags();
 };
 
 #endif
