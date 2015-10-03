@@ -37,29 +37,6 @@ int main(int argc, char* argv[])
 		}
 	}
 
-	/*char** test = new char*[4];
-	for (int i = 0; i < 4; i++)
-		test[i] = new char[4];
-
-	char letter = 'a';
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-			test[i][j] = letter++;
-	}
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-			std::cout << test[i][j] << " ";		
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	StateNode testState(test);
-	testState.printDiagonals();
-	std::cout << std::endl;
-	testState.printOtherDiags();*/
-
-
 	StateNode *initState = new StateNode(init);
 
 	StateNode *finishState = HillClimbing<StateNode>::Run(initState);
