@@ -17,8 +17,7 @@ class StateNode
 		void calcVertCol();
 		void calcDiagCol();
 		int calcCollisions(int queensPerRow);
-		void printDiagonals();
-		void printOtherDiags();
+		char** getState();
 };
 
 #endif

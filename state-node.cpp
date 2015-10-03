@@ -10,7 +10,7 @@ StateNode::StateNode(char ** state)
 	/*for (int i = 0; i < 4; i++)
 		delete[] state[i];*/
 
-	//calculateHeuristic();
+	calculateHeuristic();
 }
 
 StateNode::~StateNode()
@@ -100,7 +100,55 @@ void StateNode::calcVertCol()
 
 void StateNode::calcDiagCol()
 {
-	// Hard
+	int queensPerDiag = 0;
+	int collisions = 0;
+
+	// Do first diagonal
+	for (int k = 0; k < 4 * 2; k++)
+	{
+		for (int j = 0; j <= k; j++)
+		{
+			int i = k - j;
+			if (i < 4 && j < 4) {
+				if (state[j][i] == 'X')
+				{
+					queensPerDiag++;
+				}
+			}
+		}
+		collisions += calcCollisions(queensPerDiag);
+		queensPerDiag = 0;
+	}
+
+	queensPerDiag = 0;
+	// Do second diagonal
+	for (int i = 4 - 1; i > 0; i--) 
+	{
+		for (int j = 0, x = i; x <= 4 - 1; j++, x++) 
+		{
+			if (state[x][j] == 'X')
+			{
+				queensPerDiag++;
+			}
+		}
+		collisions += calcCollisions(queensPerDiag);
+		queensPerDiag = 0;
+	}
+
+	for (int i = 0; i <= 4 - 1; i++) 
+	{
+		for (int j = 0, y = i; y <= 4 - 1; j++, y++) 
+		{
+			if (state[j][y] == 'X')
+			{
+				queensPerDiag++;
+			}
+		}
+		collisions += calcCollisions(queensPerDiag);
+		queensPerDiag = 0;
+	}
+
+	this->heuristic += collisions;
 }
 
 int StateNode::calcCollisions(int queensPerRow)
@@ -122,35 +170,18 @@ int StateNode::calcCollisions(int queensPerRow)
 	return collisions;
 }
 
-void StateNode::printDiagonals()
+char ** StateNode::getState()
 {
-	for (int k = 0; k < 4 * 2; k++) 
+	// Must make copy of state to prevent outside manipulation
+	char** state = new char*[4];
+	for (int i = 0; i < 4; i++)
+		state[i] = new char[4];
+
+	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j <= k; j++) 
-		{
-			int i = k - j;
-			if (i < 4 && j < 4) {
-				std::cout << state[i][j] << " ";
-			}
-		}
-		std::cout << std::endl;
-	}
-}
-
-void StateNode::printOtherDiags()
-{
-	for (int i = 4 - 1; i > 0; i--) {
-		for (int j = 0, x = i; x <= 4 - 1; j++, x++) {
-			std::cout << state[x][j] << " ";
-		}
-		std::cout << std::endl;
+		for (int j = 0; j < 4; j++)
+			state[i][j] = this->state[i][j];
 	}
 
-
-	for (int i = 0; i <= 4 - 1; i++) {
-		for (int j = 0, y = i; y <= 4 - 1; j++, y++) {
-			std::cout << state[j][y] << " ";
-		}
-		std::cout << std::endl;
-	}
+	return state;
 }

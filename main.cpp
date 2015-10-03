@@ -30,14 +30,14 @@ int main(int argc, char* argv[])
 	{
 		for (int j = 0; j < 4; j++)
 		{
-			if (i == 0)
+			if (i == j)
 				init[i][j] = 'X';
 			else
 				init[i][j] = ' ';
 		}
 	}
 
-	char** test = new char*[4];
+	/*char** test = new char*[4];
 	for (int i = 0; i < 4; i++)
 		test[i] = new char[4];
 
@@ -57,12 +57,17 @@ int main(int argc, char* argv[])
 	StateNode testState(test);
 	testState.printDiagonals();
 	std::cout << std::endl;
-	testState.printOtherDiags();
+	testState.printOtherDiags();*/
 
 
-	/*StateNode *initState = new StateNode(init);
+	StateNode *initState = new StateNode(init);
 
-	StateNode *finishState = HillClimbing<StateNode>::Run(initState);*/
+	StateNode *finishState = HillClimbing<StateNode>::Run(initState);
+
+	finishState->printState();
+
+	std::cout << "\ninit state h = " << initState->getHeuristic() << std::endl
+		<< "Best state h = " << finishState->getHeuristic() << std::endl;
 
 	return 0;
 }
