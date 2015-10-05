@@ -1,14 +1,25 @@
+//////////////////////////////////////////////////////////////
+//															//
+//	Author: Brad Stell										//
+//															//
+//	Date: 10/5/2015											//
+//															//
+//	Language: c++											//
+//															//
+//	Description: Header file of custom namespace declaring	//
+//		function entry point for calculating the heuristic	//
+//		for the n-queens puzzle								//
+//															//
+//////////////////////////////////////////////////////////////
+
 #ifndef HEURISTIC_H
 #define HEURISTIC_H
 
+// Make custom namespace to hold the heuristic
+// calculating function
 namespace NQueens
 {
-	static int heur = 0;
 	int CalcHeuristic(char** state, int size);
-	void CalcHorzH(char ** state, int &heuristic, int size);
-	void CalcColH(char ** state, int &heuristic, int size);
-	void CalcDiagH(char ** state, int &heuristic, int size);
-	int calcCollisions(int queensPerRow, int size);
 }
 
 

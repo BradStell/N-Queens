@@ -1,8 +1,23 @@
+//////////////////////////////////////////////////////////
+//														//
+//	Author: Brad Stell									//
+//														//
+//	Date: 10/5/2015										//
+//														//
+//	Language: c++										//
+//														//
+//	Description: This class represends a node for a		//
+//   particular instance of the game n-queens. The node	//
+//   contains the game state, as well as a few methods	//
+//   to operate on the node.							//
+//														//
+//////////////////////////////////////////////////////////
+
 #include <iostream>
 #include "state-node.h"
 #include "heuristic.h"
 
-
+/* Constructor, accepts a state and a size (the number of queens) */
 StateNode::StateNode(char ** state, int size)
 {
 	this->state = state;
@@ -10,17 +25,23 @@ StateNode::StateNode(char ** state, int size)
 	this ->heuristic = NQueens::CalcHeuristic(state, size);
 }
 
+/* 
+	Deconstructor, deletes dynamic memory used by the state after
+	program execution. Prevents memory leaks
+*/
 StateNode::~StateNode()
 {
 	for (int i = 0; i < this->size; i++)
 		delete [] state[i];
 }
 
+/* Returns the heuristic value of the node */
 int StateNode::getHeuristic()
 {
 	return this->heuristic;
 }
 
+/* Prints the state with a nice like board for better visualization */
 void StateNode::printState()
 {
 	for (int i = 0; i < this->size; i++)
@@ -52,6 +73,7 @@ void StateNode::printState()
 	}
 }
 
+/* Returns a copy of the nodes state */
 char ** StateNode::getState()
 {
 	// Must make copy of state to prevent outside manipulation
