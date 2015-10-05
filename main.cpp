@@ -17,34 +17,55 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 #include <iostream>
+#include <cstdlib>
+#include <time.h>
+#include <ctime>
 #include "hill-climbing.h"
 #include "state-node.h"
 
+void randomizeGame(char** state);
+
 int main(int argc, char* argv[])
 {
+	StateNode *initState;
+	StateNode *finishState;
+	bool finished = false;
+	srand(time(NULL));
+
 	char** init = new char*[4];
 	for (int i = 0; i < 4; i++)
 		init[i] = new char[4];
 
-	for (int i = 0; i < 4; i++)
+	while (!finished)
 	{
-		for (int j = 0; j < 4; j++)
-		{
-			if (i == j)
-				init[i][j] = 'X';
-			else
-				init[i][j] = ' ';
-		}
-	}
+		randomizeGame(init);
 
-	StateNode *initState = new StateNode(init);
+		initState = new StateNode(init);
+		//initState->printState();
 
-	StateNode *finishState = HillClimbing<StateNode>::Run(initState);
+		finishState = HillClimbing<StateNode>::Run(initState);
 
+		if (finishState->getHeuristic() == 0)
+			finished = true;
+	}		
+
+	std::cout << "\nFound solution:\n";
 	finishState->printState();
 
 	std::cout << "\ninit state h = " << initState->getHeuristic() << std::endl
 		<< "Best state h = " << finishState->getHeuristic() << std::endl;
 
 	return 0;
+}
+
+void randomizeGame(char** state)
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+			state[j][i] = ' ';
+	}
+
+	for (int i = 0; i < 4; i++)
+		state[rand() % 4][i] = 'X';
 }
