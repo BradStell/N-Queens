@@ -6,9 +6,10 @@ class StateNode
 	private:
 		char** state;
 		int heuristic;
+		int size;
 
 	public:
-		StateNode(char** state);
+		StateNode(char** state, int size);
 		~StateNode();
 		int getHeuristic();
 		void printState();

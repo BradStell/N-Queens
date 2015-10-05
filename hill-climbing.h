@@ -10,8 +10,8 @@ template <class T>
 class HillClimbing
 {
 	public:
-		static T* Run(T *initState);
-		static T* GetBestNeighbor(T* currentState);
+		static T* Run(T *initState, int size);
+		static T* GetBestNeighbor(T* currentState, int size);
 };
 
 
@@ -23,7 +23,7 @@ class HillClimbing
 	hill climbing algorithm
 */
 template <class T>
-T* HillClimbing<T>::Run(T *initState)
+T* HillClimbing<T>::Run(T *initState, int size)
 {
 	T *current = initState;
 	T *neighbor;
@@ -31,7 +31,7 @@ T* HillClimbing<T>::Run(T *initState)
 
 	while (stillLooking)
 	{
-		neighbor = GetBestNeighbor(current);
+		neighbor = GetBestNeighbor(current, size);
 		if (neighbor->getHeuristic() >= current->getHeuristic())
 			return current;
 		else
@@ -46,25 +46,25 @@ T* HillClimbing<T>::Run(T *initState)
 	heuristic value.
 */
 template <class T>
-T* HillClimbing<T>::GetBestNeighbor(T *currentState)
+T* HillClimbing<T>::GetBestNeighbor(T *currentState, int size)
 {
-	int** heuristicArray = new int*[4];
-	for (int i = 0; i < 4; i++)
-		heuristicArray[i] = new int[4];
+	int** heuristicArray = new int*[size];
+	for (int i = 0; i < size; i++)
+		heuristicArray[i] = new int[size];
 
 	char** nowState = currentState->getState();
 	int row = 0;
 	T* bestNeighbor;
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < size; j++)
 		{
 			// find the queen
 			if (nowState[j][i] == 'X')
 			{
 				// set current state heuristic
-				heuristicArray[j][i] = NQueens::CalcHeuristic(nowState);
+				heuristicArray[j][i] = NQueens::CalcHeuristic(nowState, size);
 
 				// Grab the row spot for manipulation
 				row = j;
@@ -76,7 +76,7 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState)
 				while (row > 0)
 				{
 					nowState[--row][i] = 'X';
-					heuristicArray[row][i] = NQueens::CalcHeuristic(nowState);
+					heuristicArray[row][i] = NQueens::CalcHeuristic(nowState, size);
 					nowState[row][i] = ' ';
 				}
 
@@ -85,7 +85,7 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState)
 				while (row < 3)
 				{
 					nowState[++row][i] = 'X';
-					heuristicArray[row][i] = NQueens::CalcHeuristic(nowState);
+					heuristicArray[row][i] = NQueens::CalcHeuristic(nowState, size);
 					nowState[row][i] = ' ';
 				}
 
@@ -98,9 +98,9 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState)
 	// find minimum value
 	int minRow = 0;
 	int minCol = 0;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < size; j++)
 		{
 			if (heuristicArray[j][i] < heuristicArray[minRow][minCol])
 			{
@@ -111,14 +111,14 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState)
 	}
 
 	// Replace Queen
-	for (int j = 0; j < 4; j++)
+	for (int j = 0; j < size; j++)
 	{
 		if (nowState[j][minCol] == 'X')
 			nowState[j][minCol] = ' ';
 	}
 	nowState[minRow][minCol] = 'X';
 
-	bestNeighbor = new T(nowState);
+	bestNeighbor = new T(nowState, size);
 
 	return bestNeighbor;
 }

@@ -3,17 +3,16 @@
 #include "heuristic.h"
 
 
-StateNode::StateNode(char ** state)
+StateNode::StateNode(char ** state, int size)
 {
 	this->state = state;
-	this->heuristic = 0;
-
-	this ->heuristic = NQueens::CalcHeuristic(state);
+	this->size = size;
+	this ->heuristic = NQueens::CalcHeuristic(state, size);
 }
 
 StateNode::~StateNode()
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < this->size; i++)
 		delete [] state[i];
 }
 
@@ -24,12 +23,15 @@ int StateNode::getHeuristic()
 
 void StateNode::printState()
 {
-	std::cout << " ____ ____ ____ ____\n";
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < this->size; i++)
+		std::cout << " ____";
+	std::cout << std::endl;
+
+	for (int i = 0; i < this->size; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < this->size; j++)
 		{
-			if (j < 3)
+			if (j < this->size - 1)
 			{
 				
 				std::cout << "| " << state[i][j] << "  ";
@@ -43,20 +45,23 @@ void StateNode::printState()
 			}
 
 		}
-		std::cout << "\n|____|____|____|____|\n";
+		std::cout << std::endl;
+		for (int k = 0; k < this->size; k++)
+			std::cout << "|____";
+		std::cout << "|\n";
 	}
 }
 
 char ** StateNode::getState()
 {
 	// Must make copy of state to prevent outside manipulation
-	char** state = new char*[4];
-	for (int i = 0; i < 4; i++)
-		state[i] = new char[4];
+	char** state = new char*[this->size];
+	for (int i = 0; i < this->size; i++)
+		state[i] = new char[this->size];
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < this->size; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < this->size; j++)
 			state[i][j] = this->state[i][j];
 	}
 

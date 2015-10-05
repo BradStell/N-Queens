@@ -23,7 +23,8 @@
 #include "hill-climbing.h"
 #include "state-node.h"
 
-void randomizeGame(char** state);
+void randomizeGame(char** state, int size);
+void getSize(int &size);
 
 int main(int argc, char* argv[])
 {
@@ -31,19 +32,22 @@ int main(int argc, char* argv[])
 	StateNode *finishState;
 	bool finished = false;
 	srand(time(NULL));
+	int size = 4;
 
-	char** init = new char*[4];
-	for (int i = 0; i < 4; i++)
-		init[i] = new char[4];
+	getSize(size);
+
+	char** init = new char*[size];
+	for (int i = 0; i < size; i++)
+		init[i] = new char[size];
 
 	while (!finished)
 	{
-		randomizeGame(init);
+		randomizeGame(init, size);
 
-		initState = new StateNode(init);
+		initState = new StateNode(init, size);
 		//initState->printState();
 
-		finishState = HillClimbing<StateNode>::Run(initState);
+		finishState = HillClimbing<StateNode>::Run(initState, size);
 
 		if (finishState->getHeuristic() == 0)
 			finished = true;
@@ -58,14 +62,20 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void randomizeGame(char** state)
+void randomizeGame(char** state, int size)
 {
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < 4; j++)
+		for (int j = 0; j < size; j++)
 			state[j][i] = ' ';
 	}
 
-	for (int i = 0; i < 4; i++)
-		state[rand() % 4][i] = 'X';
+	for (int i = 0; i < size; i++)
+		state[rand() % size][i] = 'X';
+}
+
+void getSize(int &size)
+{
+	std::cout << "\nHow many queens do you want to solve for?";
+	std::cin >> size;
 }

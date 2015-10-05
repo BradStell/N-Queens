@@ -4,11 +4,11 @@
 namespace NQueens
 {
 	static int heur = 0;
-	int CalcHeuristic(char** state);
-	void CalcHorzH(char ** state, int &heuristic);
-	void CalcColH(char ** state, int &heuristic);
-	void CalcDiagH(char ** state, int &heuristic);
-	int calcCollisions(int queensPerRow);
+	int CalcHeuristic(char** state, int size);
+	void CalcHorzH(char ** state, int &heuristic, int size);
+	void CalcColH(char ** state, int &heuristic, int size);
+	void CalcDiagH(char ** state, int &heuristic, int size);
+	int calcCollisions(int queensPerRow, int size);
 }
 
 
