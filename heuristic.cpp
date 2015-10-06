@@ -11,6 +11,7 @@
 //														//
 //////////////////////////////////////////////////////////
 
+#include <vector>
 #include "heuristic.h"
 
 /*
@@ -22,35 +23,31 @@
 */
 namespace {
 	static int heur = 0;
-	void CalcHorzH(char ** state, int &heuristic, int size);
-	void CalcColH(char ** state, int &heuristic, int size);
-	void CalcDiagH(char ** state, int &heuristic, int size);
+	void CalcHorzH(Char2D state, int &heuristic, int size);
+	void CalcColH(Char2D state, int &heuristic, int size);
+	void CalcDiagH(Char2D state, int &heuristic, int size);
 	int calcCollisions(int queensPerRow, int size);
 }
 
-/*
-	Implementation of the 'outside-visible' function
-*/
-namespace NQueens
+
+// Visible function from other code with the NQueens namespace
+// Calculates the heuristic value of a particular state
+int NQueens::CalcHeuristic(Char2D state, int size)
 {
-	// Visible function from other code with the NQueens namespace
-	// Calculates the heuristic value of a particular state
-	int CalcHeuristic(char ** state, int size)
-	{
-		heur = 0;
+	heur = 0;
 
-		// Calculate collisions per row
-		CalcHorzH(state, heur, size);
+	// Calculate collisions per row
+	CalcHorzH(state, heur, size);
 
-		// Calculate collisions per column
-		CalcColH(state, heur, size);
+	// Calculate collisions per column
+	CalcColH(state, heur, size);
 
-		// Calculate collisions per diagonal
-		CalcDiagH(state, heur, size);
+	// Calculate collisions per diagonal
+	CalcDiagH(state, heur, size);
 
-		return heur;
-	}
+	return heur;
 }
+
 
 /*
 Anonymous namespace containing function definitions
@@ -62,7 +59,7 @@ Methods in this file.
 namespace {
 
 	/* Calculate the horizontal collisions between queens */
-	void CalcHorzH(char ** state, int &heur, int size)
+	void CalcHorzH(Char2D state, int &heur, int size)
 	{
 		int queensPerRow = 0;
 		int collisions = 0;
@@ -93,7 +90,7 @@ namespace {
 	}
 
 	/* Calculate the column collisions */
-	void CalcColH(char ** state, int &heur, int size)
+	void CalcColH(Char2D state, int &heur, int size)
 	{
 		int queensPerCol = 0;
 		int collisions = 0;
@@ -123,7 +120,7 @@ namespace {
 	}
 
 	/* Calculate diagonal collisions */
-	void CalcDiagH(char ** state, int &heur, int size)
+	void CalcDiagH(Char2D state, int &heur, int size)
 	{
 		int queensPerDiag = 0;
 		int collisions = 0;

@@ -17,10 +17,11 @@
 
 // Make custom namespace to hold the heuristic
 // calculating function
+typedef std::vector<std::vector<char>> Char2D;
+
 namespace NQueens
 {
-	int CalcHeuristic(char** state, int size);
+	int CalcHeuristic(Char2D state, int size);
 }
-
 
 #endif

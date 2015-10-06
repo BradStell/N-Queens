@@ -24,10 +24,10 @@ template <class T>
 class HillClimbing
 {
 	private:
-		static T* GetBestNeighbor(T* currentState, int size);
+		static T GetBestNeighbor(T currentState, int size);
 
 	public:
-		static T* Run(T *initState, int size);
+		static T Run(T initState, int size);
 };
 
 
@@ -39,11 +39,11 @@ class HillClimbing
 	hill climbing algorithm
 */
 template <class T>
-T* HillClimbing<T>::Run(T *initState, int size)
+T HillClimbing<T>::Run(T initState, int size)
 {
 	// Make pointers to two StateNodes
-	T *current = initState;
-	T *neighbor;
+	T current = initState;
+	T neighbor;
 
 	// Set a flag indicating if we are still looking for a finished 
 	// state or not
@@ -58,16 +58,21 @@ T* HillClimbing<T>::Run(T *initState, int size)
 		// If the best neighbor of current does not have a better
 		// heuristic value, then current is the best state we can do
 		// so return it
-		if (neighbor->getHeuristic() >= current->getHeuristic())
+		if (neighbor.getHeuristic() >= current.getHeuristic())
+		{
+			//delete neighbor;
 			return current;
+		}
+			
 
 		// If the heuristic of neighbor was better than current,
 		// make it our new current and start the algo over
 		else
+		{
+			//delete current;
 			current = neighbor;
+		}
 	}
-
-	return current;
 }
 
 /*
@@ -75,7 +80,7 @@ T* HillClimbing<T>::Run(T *initState, int size)
 	heuristic value.
 */
 template <class T>
-T* HillClimbing<T>::GetBestNeighbor(T *currentState, int size)
+T HillClimbing<T>::GetBestNeighbor(T currentState, int size)
 {
 	// Make a 2D array to hold the heuristic matrix
 	int** heuristicArray = new int*[size];
@@ -83,13 +88,13 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState, int size)
 		heuristicArray[i] = new int[size];
 
 	// Get the current state of the game board
-	char** nowState = currentState->getState();
+	Char2D nowState = currentState.getState();
 
 	// Set an index as to what row we are on
 	int row = 0;
 
 	// Make a pointer to a StateNode for reference to the best state
-	T* bestNeighbor;
+	/*T* bestNeighbor;*/
 
 	// Loop through all columns in the 2D game board array
 	for (int i = 0; i < size; i++)
@@ -154,6 +159,9 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState, int size)
 		}					
 	}
 
+	for (int i = 0; i < size; i++)
+		delete[] heuristicArray[i];
+
 	// Place the queen in the location of the best heuristic value
 	// from the heuristic array
 	for (int j = 0; j < size; j++)
@@ -164,7 +172,7 @@ T* HillClimbing<T>::GetBestNeighbor(T *currentState, int size)
 	nowState[minRow][minCol] = 'X';
 
 	// Make a new StateNode object with the new best state
-	bestNeighbor = new T(nowState, size);
+	T bestNeighbor(nowState, size);
 
 	return bestNeighbor;
 }

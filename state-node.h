@@ -16,19 +16,22 @@
 #ifndef STATE_NODE_H
 #define STATE_NODE_H
 
+#include <vector>
+typedef std::vector<std::vector<char>> Char2D;
+
 class StateNode
 {
 	private:
-		char** state;
-		int heuristic;
+		Char2D state;
 		int size;
+		int heuristic;
 
 	public:
-		StateNode(char** state, int size);
-		~StateNode();
-		int getHeuristic();
+		StateNode::StateNode() {}
+		StateNode(const Char2D& theState, int theSize);
+		int getHeuristic() { return heuristic; }
 		void printState();
-		char** getState();
+		Char2D& getState() { return state; }
 };
 
 #endif

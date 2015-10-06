@@ -20,6 +20,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <time.h>
+#include <vector>
 
 // My files
 #include "hill-climbing.h"
@@ -29,7 +30,8 @@
 /// Function Declarations ///
 
 /* Randomizes the queens on the board */
-void randomizeGame(char** state, int size);
+// Char2D is a std::vector< std::vector<char> > (2D vector)
+void randomizeGame(Char2D &state, int size);
 
 /* Gets the number of queens from the user */
 void getNumQueens(int &size);
@@ -43,8 +45,6 @@ int main(int argc, char* argv[])
 {
 	//////////////////
 	/// Variables ///
-	StateNode *initState = nullptr;					// Pointer to the initial state
-	StateNode *finishState = nullptr;				// Pointer to the final state
 	bool finished = false;							// Flag for checking if the puzzle has completed
 	srand(static_cast<unsigned int>(time(NULL)));	// Seeding rand() for better random numbers
 	int size = 4;									// Holds size of puzzle
@@ -53,31 +53,30 @@ int main(int argc, char* argv[])
 	getNumQueens(size);
 
 	// Make dynamic 2D array of the specified size
-	char** init = new char*[size];
-	for (int i = 0; i < size; i++)
-		init[i] = new char[size];
+	Char2D init(size, std::vector<char>(size));
 
-	// Game loop (not hillclimbing loop)
+	StateNode finishState;
+	// Puzzle Main loop
 	while (!finished)
-	{
+	{		
 		// Randomize the queens placement on the board
 		randomizeGame(init, size);
 
 		// Make the initial state with the current game board
-		initState = new StateNode(init, size);
+		StateNode initState(init, size);
 
 		// Run the hillclimbing algo
 		finishState = HillClimbing<StateNode>::Run(initState, size);
 
 		// Check to see if the algo returned a valid end state
-		if (finishState->getHeuristic() == 0)
+		if (finishState.getHeuristic() == 0)
 			finished = true;
 	}		
 
 	// Print results of game to screen
 	std::cout << "\nFound solution:\n";
-	finishState->printState();
-	std::cout << "Best state h = " << finishState->getHeuristic() << std::endl;
+	finishState.printState();
+	std::cout << "Best state h = " << finishState.getHeuristic() << std::endl;
 
 	return 0;
 }
@@ -85,7 +84,7 @@ int main(int argc, char* argv[])
 /*
 	Randomizes the placement of the queens on the board
 */
-void randomizeGame(char** state, int size)
+void randomizeGame(Char2D &state, int size)
 {
 	// First remove all queens from the board
 	for (int i = 0; i < size; i++)
@@ -107,7 +106,7 @@ void getNumQueens(int &size)
 	std::cout << "\n\t** This program solves the N-Queens puzzle **\n\n"
 		<< "Rules:\n  You must choose the # of queens to be of size 4 or larger.\n"
 		<< "  (< 4 there is no solution).\n"
-		<< "  * Queens of size 10 and larger may take some time\n";
+		<< "  * Queens of size 16 and larger may take some time\n";
 
 	// Make sure the number of queens is larger than 3
 	do
