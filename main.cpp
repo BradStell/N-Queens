@@ -36,6 +36,10 @@ void randomizeGame(Char2D &state, int size);
 /* Gets the number of queens from the user */
 void getNumQueens(int &size);
 
+// Global Variables
+int STATES_CHANGED = 0;
+int RESTARTS = -1;
+
 
 /*
 	Main Function:
@@ -45,6 +49,7 @@ int main(int argc, char* argv[])
 {
 	//////////////////
 	/// Variables ///
+	StateNode finishState;
 	bool finished = false;							// Flag for checking if the puzzle has completed
 	srand(static_cast<unsigned int>(time(NULL)));	// Seeding rand() for better random numbers
 	int size = 4;									// Holds size of puzzle
@@ -54,8 +59,7 @@ int main(int argc, char* argv[])
 
 	// Make dynamic 2D array of the specified size
 	Char2D init(size, std::vector<char>(size));
-
-	StateNode finishState;
+	
 	// Puzzle Main loop
 	while (!finished)
 	{		
@@ -66,7 +70,7 @@ int main(int argc, char* argv[])
 		StateNode initState(init, size);
 
 		// Run the hillclimbing algo
-		finishState = HillClimbing<StateNode>::Run(initState, size);
+		finishState = HillClimbing<StateNode>::Run(initState, size, STATES_CHANGED);
 
 		// Check to see if the algo returned a valid end state
 		if (finishState.getHeuristic() == 0)
@@ -74,9 +78,10 @@ int main(int argc, char* argv[])
 	}		
 
 	// Print results of game to screen
-	std::cout << "\nFound solution:\n";
+	std::cout << "\nComplete State\n";
 	finishState.printState();
-	std::cout << "Best state h = " << finishState.getHeuristic() << std::endl;
+	std::cout << "\nNumber of Restarts: " << RESTARTS << std::endl
+		<< "States moved to: " << STATES_CHANGED << std::endl;
 
 	return 0;
 }
@@ -86,6 +91,8 @@ int main(int argc, char* argv[])
 */
 void randomizeGame(Char2D &state, int size)
 {
+	RESTARTS++;
+
 	// First remove all queens from the board
 	for (int i = 0; i < size; i++)
 	{

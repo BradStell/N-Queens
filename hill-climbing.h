@@ -20,6 +20,7 @@
 
 //////////////////////////////////
 /// Dynamic Class Declaration ///
+
 template <class T>
 class HillClimbing
 {
@@ -27,7 +28,7 @@ class HillClimbing
 		static T GetBestNeighbor(T currentState, int size);
 
 	public:
-		static T Run(T initState, int size);
+		static T Run(T initState, int size, int& STATES_CHANGED);
 };
 
 
@@ -39,14 +40,12 @@ class HillClimbing
 	hill climbing algorithm
 */
 template <class T>
-T HillClimbing<T>::Run(T initState, int size)
+T HillClimbing<T>::Run(T initState, int size, int& STATES_CHANGED)
 {
 	// Make pointers to two StateNodes
 	T current = initState;
 	T neighbor;
 
-	// Set a flag indicating if we are still looking for a finished 
-	// state or not
 	bool stillLooking = true;	
 
 	// While we have not found a finished state, look for one
@@ -55,23 +54,14 @@ T HillClimbing<T>::Run(T initState, int size)
 		// Get the best neighboring state of the current state
 		neighbor = GetBestNeighbor(current, size);
 
-		// If the best neighbor of current does not have a better
-		// heuristic value, then current is the best state we can do
-		// so return it
+		// If there is not a better state to go to
 		if (neighbor.getHeuristic() >= current.getHeuristic())
-		{
-			//delete neighbor;
-			return current;
-		}
-			
+			return current;			
 
-		// If the heuristic of neighbor was better than current,
-		// make it our new current and start the algo over
-		else
-		{
-			//delete current;
-			current = neighbor;
-		}
+		// If there was a better state to move to, make that our
+		// current node
+		current = neighbor;
+		STATES_CHANGED++;
 	}
 }
 
@@ -92,9 +82,6 @@ T HillClimbing<T>::GetBestNeighbor(T currentState, int size)
 
 	// Set an index as to what row we are on
 	int row = 0;
-
-	// Make a pointer to a StateNode for reference to the best state
-	/*T* bestNeighbor;*/
 
 	// Loop through all columns in the 2D game board array
 	for (int i = 0; i < size; i++)

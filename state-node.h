@@ -27,7 +27,7 @@ class StateNode
 		int heuristic;
 
 	public:
-		StateNode::StateNode() {}
+		StateNode() {}
 		StateNode(const Char2D& theState, int theSize);
 		int getHeuristic() { return heuristic; }
 		void printState();
