@@ -125,21 +125,22 @@ namespace {
 		int queensPerDiag = 0;
 		int collisions = 0;
 
-		// Loop through first half of left to right diagonal
-		for (int k = 0; k < size * 2; k++)
+		// Loop through the diagonals bottom left to top right
+		int k = 0, l = 0;
+		for (int i = 0; i < size * 2 + size / 2 + 1; i++)
 		{
-			for (int j = 0; j <= k; j++)
+			k = 0;
+			l = i;
+			for (int j = i; j < size * 2 + size / 2 + 1; j++)
 			{
-				// Find how many queens are in each diagonal
-				int i = k - j;
-				if (i < size && j < size) {
-					if (state[j][i] == 'X')
-					{
+				if (l >= 0 && l < size && k < size)
+				{
+					if (state[l][k] == 'X')
 						queensPerDiag++;
-					}
-				}
+				}					
+				k++;
+				l--;
 			}
-
 			// Based on # of queens in diagonal, find how many 
 			// collisions this equates to
 			collisions += calcCollisions(queensPerDiag, size);
@@ -148,40 +149,28 @@ namespace {
 			queensPerDiag = 0;
 		}
 
-		
-		// Loop through second half of left to right diagonal
+		// Second diagonal: top left to bottom right
 		queensPerDiag = 0;
-		for (int i = size - 1; i > 0; i--)
+		int r = 0, p = 0;
+		for (int i = 0; i < size * 2 + size / 2 + 1; i++)
 		{
-			for (int j = 0, x = i; x <= size - 1; j++, x++)
+			r = size - 1;
+			p = i;
+			for (int j = i; j < size * 2 + size / 2 + 1; j++)
 			{
-				// Count how many queens are in each diagonal
-				if (state[x][j] == 'X')
-					queensPerDiag++;
+				if (p >= 0 && p < size && r >= 0)
+				{
+					if (state[p][r] == 'X')
+						queensPerDiag++;
+				}
+				r--;
+				p--;
 			}
-
-			// Based on # of queens, calculate collisions
+			// Based on # of queens in diagonal, find how many 
+			// collisions this equates to
 			collisions += calcCollisions(queensPerDiag, size);
 
-			// Reset variable for next diagonal iteration
-			queensPerDiag = 0;
-		}
-
-		// Loop through right to left diagonal
-		for (int i = 0; i <= size - 1; i++)
-		{
-			for (int j = 0, y = i; y <= size - 1; j++, y++)
-			{
-				// Count # of queens per diagonal
-				if (state[j][y] == 'X')
-					queensPerDiag++;
-			}
-
-			// Based on # of queens in each diagonal, find how 
-			// many collisions this equates to
-			collisions += calcCollisions(queensPerDiag, size);
-
-			// Reset variable for next iteration
+			// Reset queen for next diagonal
 			queensPerDiag = 0;
 		}
 
